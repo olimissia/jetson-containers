@@ -1,0 +1,437 @@
+auvideajnx42@auvideajnx42-desktop:~/Documents/jetson_comprehension$ jetson-containers build --name=my_container_test --simulate pytorch transformers ros:humble-desktop
+
+Namespace(packages=['pytorch', 'transformers', 'ros:humble-desktop'], name='my_container_test', base='', multiple=False, build_flags='', build_args='', use_proxy=False, package_dirs=[''], list_packages=False, show_packages=False, skip_packages=[''], skip_errors=False, skip_tests=[''], test_only=[''], simulate=True, push='', logs='', verbose=False, no_github_api=False)
+
+-- L4T_VERSION=36.4.3 JETPACK_VERSION=6.2 CUDA_VERSION=12.6 PYTHON_VERSION=3.10 LSB_RELEASE=22.04 (jammy)
+-- jetson-containers --name=my_container_test --simulate pytorch transformers ros:humble-desktop
+
+-- Copying /etc/nv_tegra_release to /home/auvideajnx42/Documents/jetson-containers/packages/llm/ollama/nv_tegra_release
+Failed to fetch version information. Status code: 404
+Failed to fetch version information. Status code: 404
+-- Building containers  ['build-essential', 'pip_cache:cu126', 'cuda:12.6', 'cudnn:9.4', 'python', 'numpy', 'cmake', 'onnx', 'pytorch:2.5', 'torchvision', 'huggingface_hub', 'rust', 'transformers', 'tensorrt', 'opencv', 'ros:humble-desktop']
+-- Building container my_container_test:l4t-r36.4.3-build-essential
+
+DOCKER_BUILDKIT=0 docker build --network=host --tag my_container_test:l4t-r36.4.3-build-essential \
+--file /home/auvideajnx42/Documents/jetson-containers/packages/build/build-essential/Dockerfile \
+--build-arg BASE_IMAGE=ubuntu:22.04 \
+/home/auvideajnx42/Documents/jetson-containers/packages/build/build-essential \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/build/my_container_test_l4t-r36.4.3-build-essential.txt; exit ${PIPESTATUS[0]}
+
+-- Building container my_container_test:l4t-r36.4.3-pip_cache_cu126
+
+DOCKER_BUILDKIT=0 docker build --network=host --tag my_container_test:l4t-r36.4.3-pip_cache_cu126 \
+--file /home/auvideajnx42/Documents/jetson-containers/packages/cuda/cuda/Dockerfile.pip \
+--build-arg BASE_IMAGE=my_container_test:l4t-r36.4.3-build-essential \
+--build-arg TAR_INDEX_URL="https://apt.jetson-ai-lab.dev/jp6/cu126" \
+--build-arg PIP_INDEX_REPO="https://pypi.jetson-ai-lab.dev/jp6/cu126" \
+--build-arg PIP_UPLOAD_REPO="http://localhost/jp6/cu126" \
+--build-arg PIP_UPLOAD_USER="jp6" \
+--build-arg PIP_UPLOAD_PASS="none" \
+--build-arg SCP_UPLOAD_URL="localhost:/dist/jp6/cu126" \
+--build-arg SCP_UPLOAD_USER="None" \
+--build-arg SCP_UPLOAD_PASS="None" \
+/home/auvideajnx42/Documents/jetson-containers/packages/cuda/cuda \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/build/my_container_test_l4t-r36.4.3-pip_cache_cu126.txt; exit ${PIPESTATUS[0]}
+
+-- Building container my_container_test:l4t-r36.4.3-cuda_12.6
+
+DOCKER_BUILDKIT=0 docker build --network=host --tag my_container_test:l4t-r36.4.3-cuda_12.6 \
+--file /home/auvideajnx42/Documents/jetson-containers/packages/cuda/cuda/Dockerfile \
+--build-arg BASE_IMAGE=my_container_test:l4t-r36.4.3-pip_cache_cu126 \
+--build-arg CUDA_URL="https://developer.download.nvidia.com/compute/cuda/12.6.3/local_installers/cuda-tegra-repo-ubuntu2204-12-6-local_12.6.3-1_arm64.deb" \
+--build-arg CUDA_DEB="cuda-tegra-repo-ubuntu2204-12-6-local" \
+--build-arg CUDA_PACKAGES="cuda-toolkit*" \
+--build-arg CUDA_ARCH_LIST="87" \
+--build-arg DISTRO="ubuntu2204" \
+/home/auvideajnx42/Documents/jetson-containers/packages/cuda/cuda \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/build/my_container_test_l4t-r36.4.3-cuda_12.6.txt; exit ${PIPESTATUS[0]}
+
+-- Testing container my_container_test:l4t-r36.4.3-cuda_12.6 (cuda:12.6/test.sh)
+
+docker run -t --rm --runtime=nvidia --network=host \
+--volume /home/auvideajnx42/Documents/jetson-containers/packages/cuda/cuda:/test \
+--volume /home/auvideajnx42/Documents/jetson-containers/data:/data \
+--workdir /test \
+my_container_test:l4t-r36.4.3-cuda_12.6 \
+/bin/bash -c '/bin/bash test.sh' \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/test/my_container_test_l4t-r36.4.3-cuda_12.6_test.sh.txt; exit ${PIPESTATUS[0]}
+
+-- Building container my_container_test:l4t-r36.4.3-cudnn_9.4
+
+DOCKER_BUILDKIT=0 docker build --network=host --tag my_container_test:l4t-r36.4.3-cudnn_9.4 \
+--file /home/auvideajnx42/Documents/jetson-containers/packages/cuda/cudnn/Dockerfile \
+--build-arg BASE_IMAGE=my_container_test:l4t-r36.4.3-cuda_12.6 \
+--build-arg CUDNN_URL="https://developer.download.nvidia.com/compute/cudnn/9.4.0/local_installers/cudnn-local-tegra-repo-ubuntu2204-9.4.0_1.0-1_arm64.deb" \
+--build-arg CUDNN_DEB="cudnn-local-tegra-repo-ubuntu2204-9.4.0" \
+--build-arg CUDNN_PACKAGES="libcudnn*-dev libcudnn*-samples" \
+/home/auvideajnx42/Documents/jetson-containers/packages/cuda/cudnn \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/build/my_container_test_l4t-r36.4.3-cudnn_9.4.txt; exit ${PIPESTATUS[0]}
+
+-- Testing container my_container_test:l4t-r36.4.3-cudnn_9.4 (cudnn:9.4/test.sh)
+
+docker run -t --rm --runtime=nvidia --network=host \
+--volume /home/auvideajnx42/Documents/jetson-containers/packages/cuda/cudnn:/test \
+--volume /home/auvideajnx42/Documents/jetson-containers/data:/data \
+--workdir /test \
+my_container_test:l4t-r36.4.3-cudnn_9.4 \
+/bin/bash -c '/bin/bash test.sh' \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/test/my_container_test_l4t-r36.4.3-cudnn_9.4_test.sh.txt; exit ${PIPESTATUS[0]}
+
+-- Building container my_container_test:l4t-r36.4.3-python
+
+DOCKER_BUILDKIT=0 docker build --network=host --tag my_container_test:l4t-r36.4.3-python \
+--file /home/auvideajnx42/Documents/jetson-containers/packages/build/python/Dockerfile \
+--build-arg BASE_IMAGE=my_container_test:l4t-r36.4.3-cudnn_9.4 \
+--build-arg PYTHON_VERSION_ARG="3.10" \
+/home/auvideajnx42/Documents/jetson-containers/packages/build/python \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/build/my_container_test_l4t-r36.4.3-python.txt; exit ${PIPESTATUS[0]}
+
+-- Building container my_container_test:l4t-r36.4.3-numpy
+
+DOCKER_BUILDKIT=0 docker build --network=host --tag my_container_test:l4t-r36.4.3-numpy \
+--file /home/auvideajnx42/Documents/jetson-containers/packages/numeric/numpy/Dockerfile \
+--build-arg BASE_IMAGE=my_container_test:l4t-r36.4.3-python \
+--build-arg NUMPY_PACKAGE="numpy<2" \
+/home/auvideajnx42/Documents/jetson-containers/packages/numeric/numpy \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/build/my_container_test_l4t-r36.4.3-numpy.txt; exit ${PIPESTATUS[0]}
+
+-- Testing container my_container_test:l4t-r36.4.3-numpy (numpy/test.py)
+
+docker run -t --rm --runtime=nvidia --network=host \
+--volume /home/auvideajnx42/Documents/jetson-containers/packages/numeric/numpy:/test \
+--volume /home/auvideajnx42/Documents/jetson-containers/data:/data \
+--workdir /test \
+my_container_test:l4t-r36.4.3-numpy \
+/bin/bash -c 'python3 test.py' \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/test/my_container_test_l4t-r36.4.3-numpy_test.py.txt; exit ${PIPESTATUS[0]}
+
+-- Building container my_container_test:l4t-r36.4.3-cmake
+
+DOCKER_BUILDKIT=0 docker build --network=host --tag my_container_test:l4t-r36.4.3-cmake \
+--file /home/auvideajnx42/Documents/jetson-containers/packages/build/cmake/cmake_pip/Dockerfile \
+--build-arg BASE_IMAGE=my_container_test:l4t-r36.4.3-numpy \
+/home/auvideajnx42/Documents/jetson-containers/packages/build/cmake/cmake_pip \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/build/my_container_test_l4t-r36.4.3-cmake.txt; exit ${PIPESTATUS[0]}
+
+-- Building container my_container_test:l4t-r36.4.3-onnx
+
+DOCKER_BUILDKIT=0 docker build --network=host --tag my_container_test:l4t-r36.4.3-onnx \
+--file /home/auvideajnx42/Documents/jetson-containers/packages/ml/onnx/Dockerfile \
+--build-arg BASE_IMAGE=my_container_test:l4t-r36.4.3-cmake \
+--build-arg ONNX_VERSION="main" \
+/home/auvideajnx42/Documents/jetson-containers/packages/ml/onnx \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/build/my_container_test_l4t-r36.4.3-onnx.txt; exit ${PIPESTATUS[0]}
+
+-- Testing container my_container_test:l4t-r36.4.3-onnx (onnx/test.py)
+
+docker run -t --rm --runtime=nvidia --network=host \
+--volume /home/auvideajnx42/Documents/jetson-containers/packages/ml/onnx:/test \
+--volume /home/auvideajnx42/Documents/jetson-containers/data:/data \
+--workdir /test \
+my_container_test:l4t-r36.4.3-onnx \
+/bin/bash -c 'python3 test.py' \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/test/my_container_test_l4t-r36.4.3-onnx_test.py.txt; exit ${PIPESTATUS[0]}
+
+-- Building container my_container_test:l4t-r36.4.3-pytorch_2.5
+
+DOCKER_BUILDKIT=0 docker build --network=host --tag my_container_test:l4t-r36.4.3-pytorch_2.5 \
+--file /home/auvideajnx42/Documents/jetson-containers/packages/pytorch/Dockerfile \
+--build-arg BASE_IMAGE=my_container_test:l4t-r36.4.3-onnx \
+--build-arg TORCH_CUDA_ARCH_ARGS="8.7" \
+--build-arg TORCH_VERSION="2.5" \
+--build-arg PYTORCH_BUILD_VERSION="2.5.0" \
+--build-arg USE_NCCL="1" \
+--build-arg USE_MPI="0" \
+/home/auvideajnx42/Documents/jetson-containers/packages/pytorch \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/build/my_container_test_l4t-r36.4.3-pytorch_2.5.txt; exit ${PIPESTATUS[0]}
+
+-- Testing container my_container_test:l4t-r36.4.3-pytorch_2.5 (pytorch:2.5/test.sh)
+
+docker run -t --rm --runtime=nvidia --network=host \
+--volume /home/auvideajnx42/Documents/jetson-containers/packages/pytorch:/test \
+--volume /home/auvideajnx42/Documents/jetson-containers/data:/data \
+--workdir /test \
+my_container_test:l4t-r36.4.3-pytorch_2.5 \
+/bin/bash -c '/bin/bash test.sh' \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/test/my_container_test_l4t-r36.4.3-pytorch_2.5_test.sh.txt; exit ${PIPESTATUS[0]}
+
+-- Testing container my_container_test:l4t-r36.4.3-pytorch_2.5 (pytorch:2.5/test.py)
+
+docker run -t --rm --runtime=nvidia --network=host \
+--volume /home/auvideajnx42/Documents/jetson-containers/packages/pytorch:/test \
+--volume /home/auvideajnx42/Documents/jetson-containers/data:/data \
+--workdir /test \
+my_container_test:l4t-r36.4.3-pytorch_2.5 \
+/bin/bash -c 'python3 test.py' \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/test/my_container_test_l4t-r36.4.3-pytorch_2.5_test.py.txt; exit ${PIPESTATUS[0]}
+
+-- Building container my_container_test:l4t-r36.4.3-torchvision
+
+DOCKER_BUILDKIT=0 docker build --network=host --tag my_container_test:l4t-r36.4.3-torchvision \
+--file /home/auvideajnx42/Documents/jetson-containers/packages/pytorch/torchvision/Dockerfile \
+--build-arg BASE_IMAGE=my_container_test:l4t-r36.4.3-pytorch_2.5 \
+--build-arg TORCHVISION_VERSION="0.20.0" \
+/home/auvideajnx42/Documents/jetson-containers/packages/pytorch/torchvision \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/build/my_container_test_l4t-r36.4.3-torchvision.txt; exit ${PIPESTATUS[0]}
+
+-- Testing container my_container_test:l4t-r36.4.3-torchvision (torchvision:0.20.0/test.py)
+
+docker run -t --rm --runtime=nvidia --network=host \
+--volume /home/auvideajnx42/Documents/jetson-containers/packages/pytorch/torchvision:/test \
+--volume /home/auvideajnx42/Documents/jetson-containers/data:/data \
+--workdir /test \
+my_container_test:l4t-r36.4.3-torchvision \
+/bin/bash -c 'python3 test.py' \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/test/my_container_test_l4t-r36.4.3-torchvision_test.py.txt; exit ${PIPESTATUS[0]}
+
+-- Building container my_container_test:l4t-r36.4.3-huggingface_hub
+
+DOCKER_BUILDKIT=0 docker build --network=host --tag my_container_test:l4t-r36.4.3-huggingface_hub \
+--file /home/auvideajnx42/Documents/jetson-containers/packages/llm/huggingface_hub/Dockerfile \
+--build-arg BASE_IMAGE=my_container_test:l4t-r36.4.3-torchvision \
+/home/auvideajnx42/Documents/jetson-containers/packages/llm/huggingface_hub \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/build/my_container_test_l4t-r36.4.3-huggingface_hub.txt; exit ${PIPESTATUS[0]}
+
+-- Testing container my_container_test:l4t-r36.4.3-huggingface_hub (huggingface_hub/test.py)
+
+docker run -t --rm --runtime=nvidia --network=host \
+--volume /home/auvideajnx42/Documents/jetson-containers/packages/llm/huggingface_hub:/test \
+--volume /home/auvideajnx42/Documents/jetson-containers/data:/data \
+--workdir /test \
+my_container_test:l4t-r36.4.3-huggingface_hub \
+/bin/bash -c 'python3 test.py' \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/test/my_container_test_l4t-r36.4.3-huggingface_hub_test.py.txt; exit ${PIPESTATUS[0]}
+
+-- Building container my_container_test:l4t-r36.4.3-rust
+
+DOCKER_BUILDKIT=0 docker build --network=host --tag my_container_test:l4t-r36.4.3-rust \
+--file /home/auvideajnx42/Documents/jetson-containers/packages/build/rust/Dockerfile \
+--build-arg BASE_IMAGE=my_container_test:l4t-r36.4.3-huggingface_hub \
+/home/auvideajnx42/Documents/jetson-containers/packages/build/rust \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/build/my_container_test_l4t-r36.4.3-rust.txt; exit ${PIPESTATUS[0]}
+
+-- Building container my_container_test:l4t-r36.4.3-transformers
+
+DOCKER_BUILDKIT=0 docker build --network=host --tag my_container_test:l4t-r36.4.3-transformers \
+--file /home/auvideajnx42/Documents/jetson-containers/packages/llm/transformers/Dockerfile \
+--build-arg BASE_IMAGE=my_container_test:l4t-r36.4.3-rust \
+--build-arg TRANSFORMERS_PACKAGE="transformers==4.50.0" \
+--build-arg TRANSFORMERS_VERSION="4.50.0" \
+/home/auvideajnx42/Documents/jetson-containers/packages/llm/transformers \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/build/my_container_test_l4t-r36.4.3-transformers.txt; exit ${PIPESTATUS[0]}
+
+-- Testing container my_container_test:l4t-r36.4.3-transformers (transformers:4.50.0/test_version.py)
+
+docker run -t --rm --runtime=nvidia --network=host \
+--volume /home/auvideajnx42/Documents/jetson-containers/packages/llm/transformers:/test \
+--volume /home/auvideajnx42/Documents/jetson-containers/data:/data \
+--workdir /test \
+my_container_test:l4t-r36.4.3-transformers \
+/bin/bash -c 'python3 test_version.py' \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/test/my_container_test_l4t-r36.4.3-transformers_test_version.py.txt; exit ${PIPESTATUS[0]}
+
+-- Testing container my_container_test:l4t-r36.4.3-transformers (transformers:4.50.0/huggingface-benchmark.py)
+
+docker run -t --rm --runtime=nvidia --network=host \
+--volume /home/auvideajnx42/Documents/jetson-containers/packages/llm/transformers:/test \
+--volume /home/auvideajnx42/Documents/jetson-containers/data:/data \
+--workdir /test \
+my_container_test:l4t-r36.4.3-transformers \
+/bin/bash -c 'python3 huggingface-benchmark.py' \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/test/my_container_test_l4t-r36.4.3-transformers_huggingface-benchmark.py.txt; exit ${PIPESTATUS[0]}
+
+-- Building container my_container_test:l4t-r36.4.3-tensorrt
+
+DOCKER_BUILDKIT=0 docker build --network=host --tag my_container_test:l4t-r36.4.3-tensorrt \
+--file /home/auvideajnx42/Documents/jetson-containers/packages/tensorrt/Dockerfile.tar \
+--build-arg BASE_IMAGE=my_container_test:l4t-r36.4.3-transformers \
+--build-arg TENSORRT_URL="https://developer.nvidia.com/downloads/compute/machine-learning/tensorrt/10.4.0/tars/TensorRT-10.4.0.26.l4t.aarch64-gnu.cuda-12.6.tar.gz" \
+/home/auvideajnx42/Documents/jetson-containers/packages/tensorrt \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/build/my_container_test_l4t-r36.4.3-tensorrt.txt; exit ${PIPESTATUS[0]}
+
+-- Testing container my_container_test:l4t-r36.4.3-tensorrt (tensorrt:10.4/test.sh)
+
+docker run -t --rm --runtime=nvidia --network=host \
+--volume /home/auvideajnx42/Documents/jetson-containers/packages/tensorrt:/test \
+--volume /home/auvideajnx42/Documents/jetson-containers/data:/data \
+--workdir /test \
+my_container_test:l4t-r36.4.3-tensorrt \
+/bin/bash -c '/bin/bash test.sh' \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/test/my_container_test_l4t-r36.4.3-tensorrt_test.sh.txt; exit ${PIPESTATUS[0]}
+
+-- Building container my_container_test:l4t-r36.4.3-opencv
+
+DOCKER_BUILDKIT=0 docker build --network=host --tag my_container_test:l4t-r36.4.3-opencv \
+--file /home/auvideajnx42/Documents/jetson-containers/packages/opencv/Dockerfile \
+--build-arg BASE_IMAGE=my_container_test:l4t-r36.4.3-tensorrt \
+--build-arg OPENCV_VERSION="4.10.0" \
+--build-arg OPENCV_PYTHON="4.x" \
+--build-arg CUDA_ARCH_BIN="8.7" \
+/home/auvideajnx42/Documents/jetson-containers/packages/opencv \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/build/my_container_test_l4t-r36.4.3-opencv.txt; exit ${PIPESTATUS[0]}
+
+-- Testing container my_container_test:l4t-r36.4.3-opencv (opencv:4.10.0/test.py)
+
+docker run -t --rm --runtime=nvidia --network=host \
+--volume /home/auvideajnx42/Documents/jetson-containers/packages/opencv:/test \
+--volume /home/auvideajnx42/Documents/jetson-containers/data:/data \
+--workdir /test \
+my_container_test:l4t-r36.4.3-opencv \
+/bin/bash -c 'python3 test.py' \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/test/my_container_test_l4t-r36.4.3-opencv_test.py.txt; exit ${PIPESTATUS[0]}
+
+-- Building container my_container_test:l4t-r36.4.3-ros_humble-desktop
+
+DOCKER_BUILDKIT=0 docker build --network=host --tag my_container_test:l4t-r36.4.3-ros_humble-desktop \
+--file /home/auvideajnx42/Documents/jetson-containers/packages/ros/Dockerfile.ros2 \
+--build-arg BASE_IMAGE=my_container_test:l4t-r36.4.3-opencv \
+--build-arg ROS_VERSION="humble" \
+--build-arg ROS_PACKAGE="desktop" \
+/home/auvideajnx42/Documents/jetson-containers/packages/ros \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/build/my_container_test_l4t-r36.4.3-ros_humble-desktop.txt; exit ${PIPESTATUS[0]}
+
+-- Testing container my_container_test:l4t-r36.4.3-ros_humble-desktop (ros:humble-desktop/test_ros2.sh)
+
+docker run -t --rm --runtime=nvidia --network=host \
+--volume /home/auvideajnx42/Documents/jetson-containers/packages/ros:/test \
+--volume /home/auvideajnx42/Documents/jetson-containers/data:/data \
+--workdir /test \
+my_container_test:l4t-r36.4.3-ros_humble-desktop \
+/bin/bash -c '/bin/bash test_ros2.sh' \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/test/my_container_test_l4t-r36.4.3-ros_humble-desktop_test_ros2.sh.txt; exit ${PIPESTATUS[0]}
+
+-- Tagging container my_container_test:l4t-r36.4.3-ros_humble-desktop -> my_container_test:l4t-r36.4.3
+docker tag my_container_test:l4t-r36.4.3-ros_humble-desktop my_container_test:l4t-r36.4.3
+
+-- Testing container my_container_test:l4t-r36.4.3 (cuda:12.6/test.sh)
+
+docker run -t --rm --runtime=nvidia --network=host \
+--volume /home/auvideajnx42/Documents/jetson-containers/packages/cuda/cuda:/test \
+--volume /home/auvideajnx42/Documents/jetson-containers/data:/data \
+--workdir /test \
+my_container_test:l4t-r36.4.3 \
+/bin/bash -c '/bin/bash test.sh' \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/test/my_container_test_l4t-r36.4.3_test.sh.txt; exit ${PIPESTATUS[0]}
+
+-- Testing container my_container_test:l4t-r36.4.3 (cudnn:9.4/test.sh)
+
+docker run -t --rm --runtime=nvidia --network=host \
+--volume /home/auvideajnx42/Documents/jetson-containers/packages/cuda/cudnn:/test \
+--volume /home/auvideajnx42/Documents/jetson-containers/data:/data \
+--workdir /test \
+my_container_test:l4t-r36.4.3 \
+/bin/bash -c '/bin/bash test.sh' \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/test/my_container_test_l4t-r36.4.3_test.sh.txt; exit ${PIPESTATUS[0]}
+
+-- Testing container my_container_test:l4t-r36.4.3 (numpy/test.py)
+
+docker run -t --rm --runtime=nvidia --network=host \
+--volume /home/auvideajnx42/Documents/jetson-containers/packages/numeric/numpy:/test \
+--volume /home/auvideajnx42/Documents/jetson-containers/data:/data \
+--workdir /test \
+my_container_test:l4t-r36.4.3 \
+/bin/bash -c 'python3 test.py' \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/test/my_container_test_l4t-r36.4.3_test.py.txt; exit ${PIPESTATUS[0]}
+
+-- Testing container my_container_test:l4t-r36.4.3 (onnx/test.py)
+
+docker run -t --rm --runtime=nvidia --network=host \
+--volume /home/auvideajnx42/Documents/jetson-containers/packages/ml/onnx:/test \
+--volume /home/auvideajnx42/Documents/jetson-containers/data:/data \
+--workdir /test \
+my_container_test:l4t-r36.4.3 \
+/bin/bash -c 'python3 test.py' \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/test/my_container_test_l4t-r36.4.3_test.py.txt; exit ${PIPESTATUS[0]}
+
+-- Testing container my_container_test:l4t-r36.4.3 (pytorch:2.5/test.sh)
+
+docker run -t --rm --runtime=nvidia --network=host \
+--volume /home/auvideajnx42/Documents/jetson-containers/packages/pytorch:/test \
+--volume /home/auvideajnx42/Documents/jetson-containers/data:/data \
+--workdir /test \
+my_container_test:l4t-r36.4.3 \
+/bin/bash -c '/bin/bash test.sh' \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/test/my_container_test_l4t-r36.4.3_test.sh.txt; exit ${PIPESTATUS[0]}
+
+-- Testing container my_container_test:l4t-r36.4.3 (pytorch:2.5/test.py)
+
+docker run -t --rm --runtime=nvidia --network=host \
+--volume /home/auvideajnx42/Documents/jetson-containers/packages/pytorch:/test \
+--volume /home/auvideajnx42/Documents/jetson-containers/data:/data \
+--workdir /test \
+my_container_test:l4t-r36.4.3 \
+/bin/bash -c 'python3 test.py' \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/test/my_container_test_l4t-r36.4.3_test.py.txt; exit ${PIPESTATUS[0]}
+
+-- Testing container my_container_test:l4t-r36.4.3 (torchvision:0.20.0/test.py)
+
+docker run -t --rm --runtime=nvidia --network=host \
+--volume /home/auvideajnx42/Documents/jetson-containers/packages/pytorch/torchvision:/test \
+--volume /home/auvideajnx42/Documents/jetson-containers/data:/data \
+--workdir /test \
+my_container_test:l4t-r36.4.3 \
+/bin/bash -c 'python3 test.py' \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/test/my_container_test_l4t-r36.4.3_test.py.txt; exit ${PIPESTATUS[0]}
+
+-- Testing container my_container_test:l4t-r36.4.3 (huggingface_hub/test.py)
+
+docker run -t --rm --runtime=nvidia --network=host \
+--volume /home/auvideajnx42/Documents/jetson-containers/packages/llm/huggingface_hub:/test \
+--volume /home/auvideajnx42/Documents/jetson-containers/data:/data \
+--workdir /test \
+my_container_test:l4t-r36.4.3 \
+/bin/bash -c 'python3 test.py' \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/test/my_container_test_l4t-r36.4.3_test.py.txt; exit ${PIPESTATUS[0]}
+
+-- Testing container my_container_test:l4t-r36.4.3 (transformers:4.50.0/test_version.py)
+
+docker run -t --rm --runtime=nvidia --network=host \
+--volume /home/auvideajnx42/Documents/jetson-containers/packages/llm/transformers:/test \
+--volume /home/auvideajnx42/Documents/jetson-containers/data:/data \
+--workdir /test \
+my_container_test:l4t-r36.4.3 \
+/bin/bash -c 'python3 test_version.py' \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/test/my_container_test_l4t-r36.4.3_test_version.py.txt; exit ${PIPESTATUS[0]}
+
+-- Testing container my_container_test:l4t-r36.4.3 (transformers:4.50.0/huggingface-benchmark.py)
+
+docker run -t --rm --runtime=nvidia --network=host \
+--volume /home/auvideajnx42/Documents/jetson-containers/packages/llm/transformers:/test \
+--volume /home/auvideajnx42/Documents/jetson-containers/data:/data \
+--workdir /test \
+my_container_test:l4t-r36.4.3 \
+/bin/bash -c 'python3 huggingface-benchmark.py' \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/test/my_container_test_l4t-r36.4.3_huggingface-benchmark.py.txt; exit ${PIPESTATUS[0]}
+
+-- Testing container my_container_test:l4t-r36.4.3 (tensorrt:10.4/test.sh)
+
+docker run -t --rm --runtime=nvidia --network=host \
+--volume /home/auvideajnx42/Documents/jetson-containers/packages/tensorrt:/test \
+--volume /home/auvideajnx42/Documents/jetson-containers/data:/data \
+--workdir /test \
+my_container_test:l4t-r36.4.3 \
+/bin/bash -c '/bin/bash test.sh' \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/test/my_container_test_l4t-r36.4.3_test.sh.txt; exit ${PIPESTATUS[0]}
+
+-- Testing container my_container_test:l4t-r36.4.3 (opencv:4.10.0/test.py)
+
+docker run -t --rm --runtime=nvidia --network=host \
+--volume /home/auvideajnx42/Documents/jetson-containers/packages/opencv:/test \
+--volume /home/auvideajnx42/Documents/jetson-containers/data:/data \
+--workdir /test \
+my_container_test:l4t-r36.4.3 \
+/bin/bash -c 'python3 test.py' \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/test/my_container_test_l4t-r36.4.3_test.py.txt; exit ${PIPESTATUS[0]}
+
+-- Testing container my_container_test:l4t-r36.4.3 (ros:humble-desktop/test_ros2.sh)
+
+docker run -t --rm --runtime=nvidia --network=host \
+--volume /home/auvideajnx42/Documents/jetson-containers/packages/ros:/test \
+--volume /home/auvideajnx42/Documents/jetson-containers/data:/data \
+--workdir /test \
+my_container_test:l4t-r36.4.3 \
+/bin/bash -c '/bin/bash test_ros2.sh' \
+2>&1 | tee /home/auvideajnx42/Documents/jetson-containers/logs/20250325_150159/test/my_container_test_l4t-r36.4.3_test_ros2.sh.txt; exit ${PIPESTATUS[0]}
+
+-- Done building container my_container_test:l4t-r36.4.3
+auvideajnx42@auvideajnx42-desktop:~/Documents/jetson_comprehension$ 

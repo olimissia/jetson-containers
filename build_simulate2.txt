@@ -1,0 +1,9 @@
+auvideajnx42@auvideajnx42-desktop:~/Documents/jetson_comprehension/jetson-containers$ jetson-containers build --simulate --name=my_container pytorch transformers
+Namespace(packages=['pytorch', 'transformers'], name='my_container', base='', multiple=False, build_flags='', build_args='', package_dirs=[''], list_packages=False, show_packages=False, skip_packages=[''], skip_errors=False, skip_tests=[''], test_only=[''], simulate=True, push='', logs='', verbose=False, no_github_api=False)
+-- L4T_VERSION=36.4.3
+-- JETPACK_VERSION=5.1
+-- CUDA_VERSION=0.0
+-- PYTHON_VERSION=3.10
+-- LSB_RELEASE=22.04 (jammy)
+-- Building container my_container with packages ['pytorch', 'transformers']
+Traceback (most recent call last):
